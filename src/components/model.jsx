@@ -4,13 +4,14 @@ import { DB } from "../Config/firebaseConfig";
 import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 import * as yup from "yup";
 
-const contactSchemaValidation = yup.object().shape(
-  {name: yup.string().required("name is required!"),
-   email: yup.string().email("Invalid Email").required("Email is required") 
-  }
-);
+const contactSchemaValidation = yup
+  .object()
+  .shape({
+    name: yup.string().required("name is required!"),
+    email: yup.string().email("Invalid Email").required("Email is required"),
+  });
 
-export default function Modal({update,setUpdate,onClose,mstate,}) {
+export default function Modal({ update, setUpdate, onClose, mstate }) {
   //function to add new contact to  firebase
   async function addContact(values) {
     try {
@@ -41,7 +42,7 @@ export default function Modal({update,setUpdate,onClose,mstate,}) {
     createPortal(
       <>
         <div className="fixed inset-0  flex items-center justify-center ">
-          <div className="relative h-[520px] min-h-[520px] max-h-[520px] w-full max-w-[330px] bg-white p-4  ">
+          <div className="relative h-[440px] min-h-[440px] max-h-[440px] w-full max-w-[330px] bg-white p-4  ">
             <Formik
               //pass yup schema here
               validationSchema={contactSchemaValidation}
@@ -64,10 +65,10 @@ export default function Modal({update,setUpdate,onClose,mstate,}) {
                     <label htmlFor="name">Name</label>
                     <Field name="name" className="h-10 border"></Field>
                     <div className="text-red-600 text-xs">
-                    {/* inbuilt function from formik, should have same name as yup  */}
-                    <ErrorMessage name="name"/> 
-                    </div>   
+                      {/* inbuilt function from formik, should have same name as yup  */}
+                      <ErrorMessage name="name" />
                     </div>
+                  </div>
                   <div className="flex flex-col gap-2">
                     <label htmlFor="email">Email</label>
                     <Field
@@ -76,9 +77,9 @@ export default function Modal({update,setUpdate,onClose,mstate,}) {
                       className="h-10 border"
                     ></Field>
                     <div className=" text-red-600 text-xs">
-                    {/* inbuilt function from formik, should have same name as yup  */}
-                    <ErrorMessage name="email"/> 
-                    </div> 
+                      {/* inbuilt function from formik, should have same name as yup  */}
+                      <ErrorMessage name="email" />
+                    </div>
                   </div>
                 </div>
                 {update ? (
