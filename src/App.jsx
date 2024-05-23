@@ -7,11 +7,17 @@ import { useEffect, useState } from "react";
 import { DB } from "./Config/firebaseConfig";
 import { doc, deleteDoc, collection, onSnapshot } from "firebase/firestore";
 import { FaUser, FaEdit, FaTrash } from "react-icons/fa";
-import { FcSettings, FcCalculator , FcBusinessContact } from "react-icons/fc";
+import { FcClock, FcCalculator, FcBusinessContact } from "react-icons/fc";
+// calci component
+import Calci from "./components/calci.jsx";
+// Stop_watch component
+import Stopwatch from "./components/stop_watch.jsx";
 
 export default function App() {
   const [app, setApp] = useState(0); //contact app button
   const [bg, setBg] = useState(false); //background button
+  const [Stop_watch, setStop_watch] = useState(false); //background button
+  const [calci, setCalci] = useState(false); //Calci app  button
   const [contacts, setContacts] = useState([]); //contacts State
   const [modal, setModal] = useState(false); //modal State
   const [update, setUpdate] = useState(null); //modal State for updating contact, where this state acts as boolean
@@ -71,91 +77,113 @@ export default function App() {
     <div className="relative mx-auto h-[520px] min-h-[520px] max-h-[520px] max-w-[330px] p-4 bg-white  mt-10 ">
       <MobileNavBar />
       <>
-        {app == 0 ? bg == false && (
-          <div className=" relative h-[460px]">
-            <div className="italic absolute left-8 top-20 text-black flex items-center justify-center font-Roboto">
-              <p role="img" aria-label="Waving Hand">
-                Hi 👋,
-              </p>
-              <div className="text-lg font-semibold pl-1">
-                Click on the Contact App
-              </div>
-            </div>
-
-            <div className="absolute bottom-10 h-[60px] w-[296px] bg-white rounded-lg  flex items-center justify-around p-2">
-              <button
-                className="flex items-center justify-center h-[45px] w-[45px] bg-red-400 rounded-full shadow-md hover:bg-red-500 transition duration-200 ease-in-out"
-                onClick={() => {
-                  setApp(1);
-                }}
-              >
-                <FcBusinessContact className="h-[30px] w-[30px]" />
-              </button>
-              <button className="flex items-center justify-center h-[45px] w-[45px] bg-blue-400 rounded-full shadow-md">
-                <FcCalculator  className="h-[30px] w-[30px]" />
-              </button>
-              <button className="flex items-center justify-center h-[45px] w-[45px] bg-green-400 rounded-full shadow-md ">
-                <FcSettings className="h-[30px] w-[30px]" />
-              </button>
-            </div>
-          </div>
-        ) : bg == true && (
-          <div className="h-[460px] italic left-8 top-20 flex items-center justify-center font-Roboto text-gray-400 ">
-            <div className="text-lg  pl-1">No background Apps</div>
-          </div>
-        )}
-        {app == 1 ? bg == false && 
-         (
-          <div>
-            <SearchBar setContacts={setContacts} />
-            <p className=" text-gray-400 text-sm ">
-              {loading && "loading...."}
-            </p>
-
-            <ul className="space-y-4 mt-4 overflow-y-auto h-[390px] no-scrollbar">
-              {contacts.map((contact) => (
-                <li
-                  key={contact.id}
-                  className="bg-white w-full p-2 flex items-center shadow-md rounded-md"
-                >
-                  <FaUser className="text-gray-500 h-5 w-5" />
-                  <div className="ml-4 flex-1">
-                    <div className="text-md font-semibold">{contact.name}</div>
-                    <div className="text-gray-500 text-xs">{contact.email}</div>
+        {app == 0 && bg == false && calci == true && <Calci />}
+        {app == 0 && bg == false && Stop_watch == true && <Stopwatch/>}
+        {app == 0
+          ? bg == false &&
+            calci == false && Stop_watch == false && (
+              <div className=" relative h-[460px] ">
+                <div className="italic absolute left-8 top-20 text-black flex items-center justify-center font-Roboto">
+                  <p role="img" aria-label="Waving Hand">
+                    Hi 👋,
+                  </p>
+                  <div className="text-lg font-semibold pl-1">
+                    Click on below Apps
                   </div>
+                </div>
+
+                <div className="absolute bottom-10 h-[60px] w-[296px] bg-white rounded-lg  flex items-center justify-around p-2">
                   <button
+                    className="flex items-center justify-center h-[45px] w-[45px] bg-red-400 rounded-full shadow-md hover:bg-red-500 transition duration-200 ease-in-out"
                     onClick={() => {
-                      onOpen();
-                      setUpdate(contact);
+                      setApp(1);
                     }}
-                    className="text-black hover:text-blue-700 ml-2"
                   >
-                    <p className="h-4 w-4 text-xs">edit</p>
+                    <FcBusinessContact className="h-[30px] w-[30px]" />
                   </button>
-                  <button
-                    onClick={() => deleteContact(contact.id)}
-                    className="text-red-500 hover:text-red-700 ml-2"
-                  >
-                    <FaTrash className="h-4 w-4" />
+                  <button className="flex items-center justify-center h-[45px] w-[45px] bg-blue-400 rounded-full shadow-md">
+                    <FcCalculator
+                      onClick={() => setCalci(true)}
+                      className="h-[30px] w-[30px]"
+                    />
                   </button>
-                </li>
-              ))}
-              <p className="text-gray-700 w-full p-2 flex justify-center ">
-                {contacts.length <= 0 && "No Contacts in this Account!"}
-              </p>
-            </ul>
-            <div className="absolute bottom-14 right-6">
-              <AddButton onOpen={onOpen} />
-            </div>
-          </div>
-        ) : bg == true && (
-          <div className="h-[460px] italic left-8 top-20 flex items-center justify-center font-Roboto text-gray-400 ">
-            <div className="text-lg  pl-1">No background Apps</div>
-          </div>
-        )}
+                  <button className="flex items-center justify-center h-[45px] w-[45px] bg-green-400 rounded-full shadow-md ">
+                    <FcClock
+                      className="h-[35px] w-[35px]"
+                      onClick={() => setStop_watch(true)}
+                    />
+                  </button>
+                </div>
+              </div>
+            )
+          : bg == true && (
+              <div className="h-[460px] italic left-8 top-20 flex items-center justify-center font-Roboto text-gray-400  ">
+                <div className="text-lg  pl-1">No background Apps</div>
+              </div>
+            )}
+        {app == 1
+          ? bg == false && (
+              <div>
+                <SearchBar setContacts={setContacts} />
+                <p className=" text-gray-400 text-sm ">
+                  {loading && "loading...."}
+                </p>
+
+                <ul className="space-y-4 mt-4 overflow-y-auto h-[390px] no-scrollbar">
+                  {contacts.map((contact) => (
+                    <li
+                      key={contact.id}
+                      className="bg-white w-full p-2 flex items-center shadow-md rounded-md"
+                    >
+                      <FaUser className="text-gray-500 h-5 w-5" />
+                      <div className="ml-4 flex-1">
+                        <div className="text-md font-semibold">
+                          {contact.name}
+                        </div>
+                        <div className="text-gray-500 text-xs">
+                          {contact.email}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          onOpen();
+                          setUpdate(contact);
+                        }}
+                        className="text-black hover:text-blue-700 ml-2"
+                      >
+                        <p className="h-4 w-4 text-xs">edit</p>
+                      </button>
+                      <button
+                        onClick={() => deleteContact(contact.id)}
+                        className="text-red-500 hover:text-red-700 ml-2"
+                      >
+                        <FaTrash className="h-4 w-4" />
+                      </button>
+                    </li>
+                  ))}
+                  <p className="text-gray-700 w-full p-2 flex justify-center ">
+                    {contacts.length <= 0 && "No Contacts in this Account!"}
+                  </p>
+                </ul>
+                <div className="absolute bottom-14 right-6">
+                  <AddButton onOpen={onOpen} />
+                </div>
+              </div>
+            )
+          : bg == true && (
+              <div className="h-[460px] italic left-8 top-20 flex items-center justify-center font-Roboto text-gray-400 ">
+                <div className="text-lg  pl-1">No background Apps</div>
+              </div>
+            )}
       </>
 
-      <BottomNavBar setBg={setBg} setApp={setApp} onBg={onBg} />
+      <BottomNavBar
+        setStop_watch={setStop_watch}
+        setBg={setBg}
+        setApp={setApp}
+        onBg={onBg}
+        setCalci={setCalci}
+      />
       <Modal
         update={update}
         setUpdate={setUpdate}
