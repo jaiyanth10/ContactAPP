@@ -1,4 +1,4 @@
-// You can get this information from firebase by clicking on  particular project the at regiter web page option (</>) symbol.
+// You can get this information from firebase by clicking on  particular project, then at apps of that project (</>) symbol.
 
 
 
